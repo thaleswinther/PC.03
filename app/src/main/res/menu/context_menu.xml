@@ -4,4 +4,7 @@
     <item android:id="@+id/deleteItem" android:title="@string/lbl_delete"></item>
     <item android:id="@+id/toTopItem" android:title="@string/lbl_totop"></item>
     <item android:id="@+id/toEndItem" android:title="@string/lbl_toend"></item>
+    <item android:id="@+id/prioritizeItem" android:title="@string/lbl_prioritize"/>
+
+
 </menu>

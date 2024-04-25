@@ -117,40 +117,59 @@ public class MainActivity extends AppCompatActivity {
         // chamado quando o usuario seleciona um item do contextual menu
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            Task tTask = tasks.get(currentPosition);
             switch(item.getItemId()) {
                 case R.id.showItem:
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    Task tTask = tasks.get(currentPosition);
-                    String tMsg = "Name: " + tTask.getName() + "\n" + "Description: " + tTask.getDescription();
+                    String tMsg = "Name: " + tTask.getName() + "\nDescription: " + tTask.getDescription() + "\nPriority: " + tTask.getPriority();
                     builder.setTitle("Task details");
                     builder.setMessage(tMsg);
                     builder.setPositiveButton("OK", null);
                     builder.create().show();
-                    mode.finish();	//encerra o action mode
+                    mode.finish();
                     return true;
 
                 case R.id.deleteItem:
                     tasks.remove(currentPosition);
                     taskRecyclerViewAdapter.notifyDataSetChanged();
-                    mode.finish();	//encerra o action mode
+                    mode.finish();
                     return true;
 
                 case R.id.toTopItem:
-                    tTask = tasks.remove(currentPosition);
+                    tasks.remove(currentPosition);
                     tasks.add(0, tTask);
                     taskRecyclerViewAdapter.notifyDataSetChanged();
-                    mode.finish();	//encerra o action mode
+                    mode.finish();
                     return true;
 
                 case R.id.toEndItem:
-                    tTask = tasks.remove(currentPosition);
+                    tasks.remove(currentPosition);
                     tasks.add(tTask);
                     taskRecyclerViewAdapter.notifyDataSetChanged();
-                    mode.finish();	//encerra o action mode
+                    mode.finish();
+                    return true;
+
+                case R.id.prioritizeItem:
+                    if ("High".equals(tTask.getPriority())) {
+                        Toast.makeText(MainActivity.this, "Task already has high priority", Toast.LENGTH_SHORT).show();
+                    } else {
+                        tTask.setPriority(nextPriority(tTask.getPriority()));
+                        taskRecyclerViewAdapter.notifyItemChanged(currentPosition);
+                    }
+                    mode.finish();
                     return true;
             }
             return false;
         }
+
+        private String nextPriority(String currentPriority) {
+            switch (currentPriority) {
+                case "Low": return "Medium";
+                case "Medium": return "High";
+                default: return "High";
+            }
+        }
+
 
         //chamado to vez que o action mode eh apresentado
         @Override
